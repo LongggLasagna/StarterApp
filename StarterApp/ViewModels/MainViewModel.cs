@@ -1,12 +1,13 @@
-/// @file MainViewModel.cs
-/// @brief Main dashboard view model for authenticated users
-/// @author StarterApp Development Team
-/// @date 2025
+// @file MainViewModel.cs
+// @brief Main dashboard view model for authenticated users
+// @author StarterApp Development Team
+// @date 2025
 
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using StarterApp.Database.Models;
 using StarterApp.Services;
+using StarterApp.Views;
 
 namespace StarterApp.ViewModels;
 
@@ -36,14 +37,8 @@ public partial class MainViewModel : BaseViewModel
     [ObservableProperty]
     private bool isAdmin;
 
-    /// @brief Default constructor for design-time support
-    /// @details Sets the title to "Dashboard"
-    public MainViewModel()
-        {
-            // Default constructor for design time support
-            Title = "Dashboard";
-        }
-    
+   
+   
     /// @brief Initializes a new instance of the MainViewModel class
     /// @param authService The authentication service instance
     /// @param navigationService The navigation service instance
@@ -107,21 +102,18 @@ public partial class MainViewModel : BaseViewModel
         await _navigationService.NavigateToAsync("TempPage");
     }
 
-
+  
     /// @brief Navigates to the user list page
     /// @details Relay command that navigates to the user management page, admin only
     /// @return A task representing the asynchronous navigation operation
+   
+
     [RelayCommand]
-    private async Task NavigateToUserListAsync()
+    private async Task NavigateToItemsAsync()
     {
-        if (!IsAdmin)
-        {
-            await Application.Current.MainPage.DisplayAlert("Access Denied", "You don't have permission to access admin features.", "OK");
-            return;
-        }
-        
-        await _navigationService.NavigateToAsync("UserListPage");
+        await _navigationService.NavigateToAsync(nameof(ItemsListPage));
     }
+            
 
     /// @brief Refreshes the dashboard data
     /// @details Relay command that reloads user data and simulates a refresh operation

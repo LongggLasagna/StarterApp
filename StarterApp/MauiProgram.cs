@@ -30,17 +30,21 @@ public static class MauiProgram
         builder.Services.AddSingleton<App>();
 
         builder.Services.AddTransient<MainViewModel>();
-        builder.Services.AddTransient<MainPage>();
-        builder.Services.AddSingleton<LoginViewModel>();
-        builder.Services.AddTransient<LoginPage>();
-        builder.Services.AddSingleton<RegisterViewModel>();
-        builder.Services.AddTransient<RegisterPage>();
-        builder.Services.AddTransient<UserListViewModel>();
-        builder.Services.AddTransient<UserListPage>();
-        builder.Services.AddTransient<UserDetailPage>();
         builder.Services.AddTransient<UserDetailViewModel>();
         builder.Services.AddSingleton<TempViewModel>();
+        builder.Services.AddTransient<UserListViewModel>();
+        builder.Services.AddSingleton<LoginViewModel>();
+        builder.Services.AddSingleton<RegisterViewModel>();
+        builder.Services.AddTransient<ItemsListViewModel>();
+
+        builder.Services.AddTransient<MainPage>();
+        builder.Services.AddTransient<LoginPage>();
+        builder.Services.AddTransient<RegisterPage>();
+        builder.Services.AddTransient<UserListPage>();
+        builder.Services.AddTransient<UserDetailPage>();
         builder.Services.AddTransient<TempPage>();
+        builder.Services.AddTransient<ItemsListPage>();
+
 
 #if DEBUG
         builder.Logging.AddDebug();
