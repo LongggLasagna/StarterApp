@@ -2,7 +2,6 @@
 // @brief Main dashboard view model for authenticated users
 // @author StarterApp Development Team
 // @date 2025
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using StarterApp.Database.Models;
@@ -106,14 +105,18 @@ public partial class MainViewModel : BaseViewModel
     /// @brief Navigates to the user list page
     /// @details Relay command that navigates to the user management page, admin only
     /// @return A task representing the asynchronous navigation operation
-   
-
     [RelayCommand]
     private async Task NavigateToItemsAsync()
     {
         await _navigationService.NavigateToAsync(nameof(ItemsListPage));
     }
-            
+
+
+    [RelayCommand]
+    private async Task NavigateToCreateItemAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(CreateItemPage));
+    } 
 
     /// @brief Refreshes the dashboard data
     /// @details Relay command that reloads user data and simulates a refresh operation

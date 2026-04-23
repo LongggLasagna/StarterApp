@@ -19,8 +19,25 @@
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="8" />
                         </Border.StrokeShape>
-                        <Label Text="{Binding .}"
-                               FontSize="18" />
+
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="{Binding Title}"
+                                   FontSize="18"
+                                   FontAttributes="Bold" />
+
+                            <Label Text="{Binding Description}"
+                                   FontSize="14" />
+
+                            <Label Text="{Binding Category}"
+                                   FontSize="12" />
+
+                            <Label Text="{Binding Location}"
+                                   FontSize="12" />
+
+                            <Label Text="{Binding DailyRate, StringFormat='£{0:F2} per day'}"
+                                   FontSize="14"
+                                   FontAttributes="Bold" />
+                        </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

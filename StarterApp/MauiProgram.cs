@@ -4,6 +4,9 @@ using StarterApp.Database.Data;
 using StarterApp.Views;
 using System.Diagnostics;
 using StarterApp.Services;
+using Microsoft.EntityFrameworkCore;
+using StarterApp.Database.Data.Repositories;
+
 
 namespace StarterApp;
 
@@ -24,6 +27,7 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
         builder.Services.AddSingleton<INavigationService, NavigationService>();
+        builder.Services.AddTransient<IItemRepository, ItemRepository>();
 
         builder.Services.AddSingleton<AppShellViewModel>();
         builder.Services.AddSingleton<AppShell>();
@@ -36,6 +40,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddSingleton<RegisterViewModel>();
         builder.Services.AddTransient<ItemsListViewModel>();
+        builder.Services.AddTransient<CreateItemViewModel>();
 
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<LoginPage>();
@@ -44,7 +49,7 @@ public static class MauiProgram
         builder.Services.AddTransient<UserDetailPage>();
         builder.Services.AddTransient<TempPage>();
         builder.Services.AddTransient<ItemsListPage>();
-
+        builder.Services.AddTransient<CreateItemPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();
