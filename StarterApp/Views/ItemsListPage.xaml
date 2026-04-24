@@ -9,7 +9,10 @@
                FontSize="24"
                FontAttributes="Bold" />
 
-        <CollectionView ItemsSource="{Binding Items}">
+        <CollectionView ItemsSource="{Binding Items}"
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Stroke="#DDDDDD"

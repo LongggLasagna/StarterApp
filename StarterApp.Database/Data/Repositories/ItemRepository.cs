@@ -20,10 +20,22 @@ public class ItemRepository : IItemRepository
             .OrderBy(i => i.Title)
             .ToListAsync();
     }
+    public async Task<Item?> GetByIdAsync(int id)
+    {
+        return await _context.Items
+            .Include(i => i.Owner)
+            .FirstOrDefaultAsync(i => i.Id == id);
+    }
 
     public async Task AddAsync(Item item)
     {
         _context.Items.Add(item);
+        await _context.SaveChangesAsync();
+    }
+    
+    public async Task UpdateAsync(Item item)
+    {
+        _context.Items.Update(item);
         await _context.SaveChangesAsync();
     }
 }

@@ -4,11 +4,24 @@ using CommunityToolkit.Mvvm.Input;
 using StarterApp.Database.Models;
 using StarterApp.Services;
 using StarterApp.Database.Data.Repositories;
+using StarterApp.Views;
 
 namespace StarterApp.ViewModels;
 
-public class ItemsListViewModel : BaseViewModel
+public partial class ItemsListViewModel : BaseViewModel
 {
+
+     [RelayCommand]
+    private async Task ItemSelectedAsync(Item item)
+    {
+        if (item == null)
+        return;
+
+        await Shell.Current.GoToAsync(nameof(ItemDetailPage), new Dictionary<string, object>
+        {
+            { "Item", item }
+        });
+    }
     private readonly IItemRepository _itemRepository;
     public ObservableCollection<Item> Items { get; } = new();
 
@@ -43,4 +56,6 @@ public class ItemsListViewModel : BaseViewModel
             IsBusy = false;
         }
     }
+
+   
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage x:Class="StarterApp.Views.CreateItemPage"
+<ContentPage x:Class="StarterApp.Views.EditItemPage"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              Title="{Binding Title}">
@@ -7,7 +7,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="12">
 
-            <Label Text="Create New Item"
+            <Label Text="Edit Item"
                    FontSize="24"
                    FontAttributes="Bold" />
 
@@ -33,8 +33,8 @@
                    TextColor="Red"
                    IsVisible="{Binding HasError}" />
 
-            <Button Text="Save Item"
-                    Command="{Binding CreateItemCommand}" />
+            <Button Text="Save Changes"
+                    Command="{Binding SaveChangesCommand}" />
 
         </VerticalStackLayout>
     </ScrollView>
