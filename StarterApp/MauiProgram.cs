@@ -28,6 +28,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddTransient<IItemRepository, ItemRepository>();
+        builder.Services.AddTransient<IRentalRepository, RentalRepository>();
 
         builder.Services.AddSingleton<AppShellViewModel>();
         builder.Services.AddSingleton<AppShell>();
@@ -43,6 +44,7 @@ public static class MauiProgram
         builder.Services.AddTransient<CreateItemViewModel>();
         builder.Services.AddTransient<ItemDetailViewModel>();
         builder.Services.AddTransient<EditItemViewModel>();
+        builder.Services.AddTransient<RequestRentalViewModel>();
 
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<LoginPage>();
@@ -54,6 +56,7 @@ public static class MauiProgram
         builder.Services.AddTransient<CreateItemPage>();
         builder.Services.AddTransient<ItemDetailPage>();
         builder.Services.AddTransient<EditItemPage>();
+        builder.Services.AddTransient<RequestRentalPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

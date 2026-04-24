@@ -27,6 +27,9 @@
               <Button Text="Edit Item"    
               Command="{Binding EditItemCommand}" />
 
+              <Button Text="Request Rental"
+              Command="{Binding RequestRentalCommand}" />
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -26,6 +26,18 @@ public partial class ItemDetailViewModel : BaseViewModel
             { "Item", Item }
         });
     }
+    
+    [RelayCommand]
+    private async Task RequestRentalAsync()
+    {
+        if (Item == null)
+        return;
+
+        await Shell.Current.GoToAsync(nameof(RequestRentalPage), new Dictionary<string, object>
+        {
+            {"Item", Item}
+        });
+    }
 
     
 }
