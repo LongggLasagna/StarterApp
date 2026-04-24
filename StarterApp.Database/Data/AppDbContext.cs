@@ -38,7 +38,7 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Item> Items { get; set; }
-
+    public DbSet<Rental> Rentals { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -90,6 +90,25 @@ public class AppDbContext : DbContext
                   .HasForeignKey(e => e.OwnerId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
+
+        // Configure Rental entity
+        modelBuilder.Entity<Rental>(entity =>
+        {
+            entity.Property(e => e.TotalPrice).HasColumnType("decimal(10,2)");
+
+            entity.HasOne(e => e.Item)
+                  .WithMany()
+                  .HasForeignKey(e => e.ItemId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Borrower)
+                  .WithMany()
+                  .HasForeignKey(e => e.BorrowerId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.Property(e => e.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(50);
+        });    
 
     }
 
