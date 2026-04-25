@@ -118,6 +118,12 @@ public partial class MainViewModel : BaseViewModel
         await Shell.Current.GoToAsync(nameof(CreateItemPage));
     } 
 
+    [RelayCommand]
+    private async Task NavigateToRentalsAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(RentalsPage));
+    }
+
     /// @brief Refreshes the dashboard data
     /// @details Relay command that reloads user data and simulates a refresh operation
     /// @return A task representing the asynchronous refresh operation

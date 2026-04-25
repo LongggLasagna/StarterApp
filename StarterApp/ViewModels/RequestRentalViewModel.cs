@@ -96,6 +96,7 @@ public partial class RequestRentalViewModel : BaseViewModel
             }
             catch (Exception ex)
             {
+                var message = ex.InnerException?.Message ?? ex.Message;
                 SetError($"failed to request rental: {ex.Message}");
             }
         }

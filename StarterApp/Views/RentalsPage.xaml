@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="StarterApp.Views.RentalsPage"
+             x:Name="RentalsPageRoot"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <Label Text="Incoming Requests"
+                   FontSize="24"
+                   FontAttributes="Bold" />
+
+            <CollectionView ItemsSource="{Binding IncomingRentals}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="#DDDDDD" StrokeThickness="1" Padding="12" Margin="0,5">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="{Binding Item.Title}" FontSize="18" FontAttributes="Bold" />
+                                <Label Text="{Binding Borrower.Email, StringFormat='Borrower: {0}'}" />
+                                <Label Text="{Binding Status, StringFormat='Status: {0}'}" />
+                                <Label Text="{Binding TotalPrice, StringFormat='Total: £{0:F2}'}" />
+
+                                <HorizontalStackLayout Spacing="10">
+                                    <Button Text="Approve"
+                                            Command="{Binding BindingContext.ApproveRentalCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+
+                                    <Button Text="Reject"
+                                            Command="{Binding BindingContext.RejectRentalCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Outgoing Requests"
+                   FontSize="24"
+                   FontAttributes="Bold" />
+
+            <CollectionView ItemsSource="{Binding OutgoingRentals}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="#DDDDDD" StrokeThickness="1" Padding="12" Margin="0,5">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="{Binding Item.Title}" FontSize="18" FontAttributes="Bold" />
+                                <Label Text="{Binding Status, StringFormat='Status: {0}'}" />
+                                <Label Text="{Binding TotalPrice, StringFormat='Total: £{0:F2}'}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="Red"
+                   IsVisible="{Binding HasError}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

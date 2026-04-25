@@ -36,4 +36,18 @@ public class RentalRepository : IRentalRepository
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync();
     }
+
+    public async Task<Rental?> GetByIdAsync(int id)
+    {
+        return await _context.Rentals
+            .Include(r => r.Item)
+            .Include(r => r.Borrower)
+            .FirstOrDefaultAsync(r => r.Id == id);
+    }
+
+    public async Task UpdateAsync(Rental rental)
+    {
+        _context.Rentals.Update(rental);
+        await _context.SaveChangesAsync();
+    }
 }
