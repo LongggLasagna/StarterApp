@@ -13,5 +13,7 @@ public class Rental
     public DateTime EndDate { get; set; }
     public decimal TotalPrice { get; set; }
     public RentalStatus Status { get; set; } = RentalStatus.Requested;
+    public bool IsRequested => Status == RentalStatus.Requested;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    
 }

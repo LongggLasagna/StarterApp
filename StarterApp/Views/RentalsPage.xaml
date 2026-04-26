@@ -21,8 +21,11 @@
                                 <Label Text="{Binding Borrower.Email, StringFormat='Borrower: {0}'}" />
                                 <Label Text="{Binding Status, StringFormat='Status: {0}'}" />
                                 <Label Text="{Binding TotalPrice, StringFormat='Total: £{0:F2}'}" />
+                                <Label Text="{Binding StartDate, StringFormat='Start: {0:dd MMM yyyy}'}" />
+                                <Label Text="{Binding EndDate, StringFormat='End: {0:dd MMM yyyy}'}" />
 
-                                <HorizontalStackLayout Spacing="10">
+                                <HorizontalStackLayout Spacing="10"
+                                                    IsVisible="{Binding IsRequested}">
                                     <Button Text="Approve"
                                             Command="{Binding BindingContext.ApproveRentalCommand, Source={x:Reference RentalsPageRoot}}"
                                             CommandParameter="{Binding .}" />
@@ -49,6 +52,9 @@
                                 <Label Text="{Binding Item.Title}" FontSize="18" FontAttributes="Bold" />
                                 <Label Text="{Binding Status, StringFormat='Status: {0}'}" />
                                 <Label Text="{Binding TotalPrice, StringFormat='Total: £{0:F2}'}" />
+                                <Label Text="{Binding StartDate, StringFormat='Start: {0:dd MMM yyyy}'}" />
+                                <Label Text="{Binding EndDate, StringFormat='End: {0:dd MMM yyyy}'}" />
+
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>

@@ -24,8 +24,9 @@
                    FontSize="18"
                    FontAttributes="Bold" />
 
-              <Button Text="Edit Item"    
-              Command="{Binding EditItemCommand}" />
+              <Button Text="Edit Item"
+                     Command="{Binding EditItemCommand}"
+                     IsVisible="{Binding CanEditItem}" />
 
               <Button Text="Request Rental"
               Command="{Binding RequestRentalCommand}" />

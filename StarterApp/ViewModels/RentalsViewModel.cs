@@ -4,6 +4,7 @@ using StarterApp.Database.Data.Repositories;
 using StarterApp.Database.Models;
 using StarterApp.Services;
 
+
 namespace StarterApp.ViewModels;
 
 public partial class RentalsViewModel : BaseViewModel
@@ -13,6 +14,13 @@ public partial class RentalsViewModel : BaseViewModel
     
     public ObservableCollection<Rental> OutgoingRentals { get; } = new();
     public ObservableCollection<Rental> IncomingRentals { get; } = new();
+
+    public bool HasIncomingRentals => IncomingRentals.Any();
+    public bool HasOutgoingRentals => OutgoingRentals.Any();
+
+    public bool HasNoIncomingRentals => !HasIncomingRentals;
+    public bool HasNoOutgoingRentals => !HasOutgoingRentals;
+
 
     public RentalsViewModel(
         IRentalRepository rentalRepository,
@@ -51,6 +59,11 @@ public partial class RentalsViewModel : BaseViewModel
 
             foreach (var rental in outgoing)
                 OutgoingRentals.Add(rental);
+
+            OnPropertyChanged(nameof(HasIncomingRentals));
+            OnPropertyChanged(nameof(HasOutgoingRentals));
+            OnPropertyChanged(nameof(HasNoIncomingRentals));
+            OnPropertyChanged(nameof(HasNoOutgoingRentals));
         }
         catch (Exception ex)
         {
@@ -60,6 +73,8 @@ public partial class RentalsViewModel : BaseViewModel
         {
             IsBusy = false;
         }
+
+            
     }
 
     [RelayCommand]
