@@ -50,4 +50,18 @@ public class RentalRepository : IRentalRepository
         _context.Rentals.Update(rental);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> HasOverLappingRentalAsync(int itemId, DateTime startDate, DateTime endDate)
+    {
+        var utcStart = DateTime.SpecifyKind(startDate.Date, DateTimeKind.Utc);
+        var utcEnd = DateTime.SpecifyKind(endDate.Date, DateTimeKind.Utc);
+
+        return await _context.Rentals.AnyAsync(r =>
+            r.ItemId == itemId &&
+            r.Status == RentalStatus.Approved &&
+            (
+                utcStart < r.EndDate && utcEnd > r.StartDate
+            )
+        );
+    }
 }

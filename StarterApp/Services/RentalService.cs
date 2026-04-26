@@ -36,8 +36,17 @@ public class RentalService : IRentalService
             throw new InvalidOperationException("End date cannot be before start date.");
         }
 
+        var hasOverlap = await _rentalRepository.HasOverLappingRentalAsync(item.Id, startDate, endDate);
+        if (hasOverlap)
+        {
+            throw new InvalidOperationException("The item is already rented for the selected dates.");
+        }
+
+
         var utcStartDate = DateTime.SpecifyKind(startDate.Date, DateTimeKind.Utc);
         var utcEndDate = DateTime.SpecifyKind(endDate.Date, DateTimeKind.Utc);
+
+       
 
         var rental = new Rental
         {
