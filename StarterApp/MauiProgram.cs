@@ -25,13 +25,30 @@ public static class MauiProgram
 
         builder.Services.AddDbContext<AppDbContext>();
 
-        builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
+        const bool useSharedApi = true;
+
+        if (useSharedApi)
+        {
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri("https://set09102-api.b-davison.workers.dev/")
+            };
+
+            builder.Services.AddSingleton(httpClient);
+            builder.Services.AddSingleton<IAuthenticationService, ApiAuthenticationService>();
+        }
+        else
+        {
+            builder.Services.AddSingleton<IAuthenticationService, LocalAuthenticationService>();
+        }
+
         builder.Services.AddSingleton<INavigationService, NavigationService>();
         builder.Services.AddTransient<IItemRepository, ItemRepository>();
         builder.Services.AddTransient<IRentalRepository, RentalRepository>();
-        builder.Services.AddTransient<IRentalService, RentalService>();
         builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
         builder.Services.AddTransient<IReviewService, ReviewService>();
+        builder.Services.AddTransient<IRentalService, RentalService>();
+       
 
         builder.Services.AddSingleton<AppShellViewModel>();
         builder.Services.AddSingleton<AppShell>();

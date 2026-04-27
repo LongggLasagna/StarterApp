@@ -10,5 +10,6 @@ public interface IRentalRepository
     Task<List<Rental>> GetOutgoingAsync(int borrowerId);
     Task<List<Rental>> GetIncomingAsync(int ownerId);
     Task<bool> HasOverLappingRentalAsync(int itemId, DateTime startDate, DateTime endDate);
+    Task<bool> HasCompletedRentalAsync(int itemId, int borrowerId);
   
 }

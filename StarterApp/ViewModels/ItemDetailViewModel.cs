@@ -71,8 +71,11 @@ public partial class ItemDetailViewModel : BaseViewModel
             {
                 Reviews.Add(review);
             }
-            AverageRating = await _reviewService.GetAverageRatingForItemAsync(Item.Id);
-        }
+            if (reviews.Any())
+                AverageRating = reviews.Average(r => r.Rating);
+            else
+                AverageRating = 0;
+            }
     
     [RelayCommand]
     private async Task AddReviewAsync()

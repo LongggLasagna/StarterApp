@@ -64,4 +64,12 @@ public class RentalRepository : IRentalRepository
             )
         );
     }
+
+    public async Task<bool> HasCompletedRentalAsync(int itemId, int borrowerId)
+    {
+        return await _context.Rentals.AnyAsync(r =>
+            r.ItemId == itemId &&
+            r.BorrowerId == borrowerId &&
+            r.Status == RentalStatus.Completed);
+    }
 }

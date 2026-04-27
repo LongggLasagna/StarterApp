@@ -63,6 +63,33 @@ public class RentalService : IRentalService
         return rental;
     }
 
+    public async Task MarkOutForRentAsync(Rental rental)
+    {
+        if (rental.Status != RentalStatus.Approved)
+            throw new InvalidOperationException("Rental must be approved first.");
+
+        rental.Status = RentalStatus.OutForRent;
+        await _rentalRepository.UpdateAsync(rental);
+    }
+
+    public async Task MarkReturnedAsync(Rental rental)
+    {
+        if (rental.Status != RentalStatus.OutForRent)
+            throw new InvalidOperationException("Rental must be out for rent.");
+
+        rental.Status = RentalStatus.Returned;
+        await _rentalRepository.UpdateAsync(rental);
+    }
+
+    public async Task MarkCompletedAsync(Rental rental)
+    {
+        if (rental.Status != RentalStatus.Returned)
+            throw new InvalidOperationException("Rental must be returned first.");
+
+        rental.Status = RentalStatus.Completed;
+        await _rentalRepository.UpdateAsync(rental);
+    }
+
     public async Task ApproveRentalAsync(Rental rental)
     {
         if (rental.Status != RentalStatus.Requested)

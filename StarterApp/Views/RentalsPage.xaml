@@ -33,6 +33,18 @@
                                     <Button Text="Reject"
                                             Command="{Binding BindingContext.RejectRentalCommand, Source={x:Reference RentalsPageRoot}}"
                                             CommandParameter="{Binding .}" />
+
+                                <Button Text="Start Rental"
+                                            Command="{Binding BindingContext.MarkOutForRentCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+
+                                 <Button Text="Mark Returned"
+                                            Command="{Binding BindingContext.MarkReturnedCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+
+                                <Button Text="Complete"
+                                            Command="{Binding BindingContext.MarkCompletedCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </Border>

@@ -4,14 +4,13 @@ using StarterApp.Database.Data.Repositories;
 using StarterApp.Database.Models;
 using StarterApp.Services;
 
-
 namespace StarterApp.ViewModels;
 
 public partial class RentalsViewModel : BaseViewModel
 {
     private readonly IRentalRepository _rentalRepository;
     private readonly IAuthenticationService _authService;
-    
+    private readonly IRentalService _rentalService;
     public ObservableCollection<Rental> OutgoingRentals { get; } = new();
     public ObservableCollection<Rental> IncomingRentals { get; } = new();
 
@@ -20,15 +19,18 @@ public partial class RentalsViewModel : BaseViewModel
 
     public bool HasNoIncomingRentals => !HasIncomingRentals;
     public bool HasNoOutgoingRentals => !HasOutgoingRentals;
+   
 
 
     public RentalsViewModel(
         IRentalRepository rentalRepository,
-        IAuthenticationService authService)
+        IAuthenticationService authService, 
+        IRentalService rentalService)
     {
         _rentalRepository = rentalRepository;
         _authService = authService;
-
+        _rentalService = rentalService;
+        
         Title = "RENTALS";
     }
     
@@ -94,6 +96,27 @@ public partial class RentalsViewModel : BaseViewModel
 
         rental.Status = RentalStatus.Rejected;
         await _rentalRepository.UpdateAsync(rental);
+        await LoadRentalsAsync();
+    }
+
+    [RelayCommand]
+    private async Task MarkOutForRentAsync(Rental rental)
+    {
+        await _rentalService.MarkOutForRentAsync(rental);
+        await LoadRentalsAsync();
+    }
+
+    [RelayCommand]
+    private async Task MarkReturnedAsync(Rental rental)
+    {
+        await _rentalService.MarkReturnedAsync(rental);
+        await LoadRentalsAsync();
+    }
+
+    [RelayCommand]
+    private async Task MarkCompletedAsync(Rental rental)
+    {
+        await _rentalService.MarkCompletedAsync(rental);
         await LoadRentalsAsync();
     }
 }
