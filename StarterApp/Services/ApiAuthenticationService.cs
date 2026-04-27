@@ -72,10 +72,10 @@ public class ApiAuthenticationService : IAuthenticationService
             });
 
             if (!response.IsSuccessStatusCode)
-            {
-                var error = await response.Content.ReadFromJsonAsync<ApiErrorResponse>();
-                return new AuthenticationResult(false, error?.Message ?? "Registration failed");
-            }
+                {
+                    var body = await response.Content.ReadAsStringAsync();
+                    return new AuthenticationResult(false, $"Registration failed: {body}");
+                }
 
             return new AuthenticationResult(true, "Registration successful. Please log in.");
         }

@@ -36,6 +36,8 @@ public static class MauiProgram
 
             builder.Services.AddSingleton(httpClient);
             builder.Services.AddSingleton<IAuthenticationService, ApiAuthenticationService>();
+            builder.Services.AddSingleton<IApiService, ApiService>();
+            builder.Services.AddTransient<IItemRepository, ApiItemRepository>();
         }
         else
         {
@@ -48,7 +50,9 @@ public static class MauiProgram
         builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
         builder.Services.AddTransient<IReviewService, ReviewService>();
         builder.Services.AddTransient<IRentalService, RentalService>();
-       
+        
+
+
 
         builder.Services.AddSingleton<AppShellViewModel>();
         builder.Services.AddSingleton<AppShell>();
