@@ -1,0 +1,20 @@
+<ContentPage x:Class="StarterApp.Views.SubmitReviewPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="{Binding Title}">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+
+        <Label Text="Rating (1-5)" />
+        <Entry Text="{Binding Rating}" Keyboard="Numeric" />
+
+        <Label Text="Comment" />
+        <Editor Text="{Binding Comment}" HeightRequest="100" />
+
+        <Button Text="Submit Review"
+                Command="{Binding SubmitCommand}" />
+
+        <Label Text="{Binding ErrorMessage}" TextColor="Red" />
+
+    </VerticalStackLayout>
+</ContentPage>

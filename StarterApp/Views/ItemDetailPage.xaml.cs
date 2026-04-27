@@ -6,13 +6,19 @@ namespace StarterApp.Views;
 [QueryProperty(nameof(Item), "Item")]
 public partial class ItemDetailPage : ContentPage
 {
-    public Item Item
+    private readonly ItemDetailViewModel _viewModel;
+    private Item? item;
+
+    public Item? Item
     {
+        get => item;
         set
         {
-            if (BindingContext is ItemDetailViewModel vm)
+            item = value;
+
+            if (value != null)
             {
-                vm.Item = value;
+                _viewModel.Item = value;
             }
         }
     }
@@ -20,7 +26,13 @@ public partial class ItemDetailPage : ContentPage
     public ItemDetailPage(ItemDetailViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        _viewModel = viewModel;
+        BindingContext = _viewModel;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _viewModel.LoadReviewsAsync();
     }
 }
-

@@ -24,12 +24,30 @@
                    FontSize="18"
                    FontAttributes="Bold" />
 
+              <Button Text="Leave a Review"
+                            Command="{Binding AddReviewCommand}" />
+
               <Button Text="Edit Item"
                      Command="{Binding EditItemCommand}"
                      IsVisible="{Binding CanEditItem}" />
 
               <Button Text="Request Rental"
               Command="{Binding RequestRentalCommand}" />
+              <Label Text="{Binding AverageRating, StringFormat='Average Rating: {0:F1}/5'}"
+                     FontAttributes="Bold" />
+
+              <CollectionView ItemsSource="{Binding Reviews}">
+                     <CollectionView.ItemTemplate>
+                     <DataTemplate>
+                            <Border Stroke="#DDD" Padding="10" Margin="0,5">
+                                   <VerticalStackLayout>
+                                   <Label Text="{Binding Rating, StringFormat='Rating: {0}/5'}" />
+                                   <Label Text="{Binding Comment}" />
+                                   </VerticalStackLayout>
+                            </Border>
+                     </DataTemplate>
+                     </CollectionView.ItemTemplate>
+              </CollectionView>
 
         </VerticalStackLayout>
     </ScrollView>
