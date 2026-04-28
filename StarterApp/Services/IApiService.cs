@@ -8,4 +8,6 @@ public interface IApiService
     Task<Item?> GetItemAsync(int id);
     Task<Item> CreateItemAsync(Item item);
     Task<Item> UpdateItemAsync(Item item);
+
+    Task<List<Review>> GetItemReviewsAsync(int itemId);
 }

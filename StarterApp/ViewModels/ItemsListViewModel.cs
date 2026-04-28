@@ -38,9 +38,15 @@ public partial class ItemsListViewModel : BaseViewModel
         try
         {
             IsBusy = true;
+            ClearError();
+
             Items.Clear();
 
+            await Application.Current.MainPage.DisplayAlert("DEBUG", "Calling repository...", "OK");
+
             var items = await _itemRepository.GetAllAsync();
+
+            await Application.Current.MainPage.DisplayAlert("DEBUG", $"Got {items.Count} items", "OK");
 
             foreach (var item in items)
             {
@@ -49,7 +55,7 @@ public partial class ItemsListViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            SetError($"Failed to load items: {ex.Message}");
+            await Application.Current.MainPage.DisplayAlert("ERROR", ex.Message, "OK");
         }
         finally
         {

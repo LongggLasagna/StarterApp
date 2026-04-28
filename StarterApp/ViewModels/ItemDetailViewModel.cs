@@ -10,7 +10,7 @@ namespace StarterApp.ViewModels;
 public partial class ItemDetailViewModel : BaseViewModel
 {
     private readonly IAuthenticationService _authenticationService;
-    private readonly IReviewService _reviewService;
+    private readonly IApiService _apiService;
     public ObservableCollection<Review> Reviews { get; } = new();
     [ObservableProperty]
     private double averageRating;
@@ -22,17 +22,17 @@ public partial class ItemDetailViewModel : BaseViewModel
     _authenticationService.CurrentUser != null &&
     Item.OwnerId == _authenticationService.CurrentUser.Id;
 
-    public ItemDetailViewModel(IAuthenticationService authenticationService, IReviewService reviewService)
+    public ItemDetailViewModel(IAuthenticationService authenticationService, IApiService apiService)
     {
+        
         _authenticationService = authenticationService;
-        _reviewService = reviewService;
+        _apiService = apiService;
         Title = "Item Details";
     }
 
-    partial void OnItemChanged(Item? oldValue, Item? newValue)
+   partial void OnItemChanged(Item? value)
     {
         OnPropertyChanged(nameof(CanEditItem));
-        _ = LoadReviewsAsync();
     }
     
     [RelayCommand]
@@ -63,20 +63,27 @@ public partial class ItemDetailViewModel : BaseViewModel
         {
             if (Item == null) return;
 
-            Reviews.Clear();
-
-            var reviews = await _reviewService.GetReviewsForItemAsync(Item.Id);
-
-            foreach (var review in reviews)
+            try
             {
-                Reviews.Add(review);
+                Reviews.Clear();
+
+                var reviews = await _apiService.GetItemReviewsAsync(Item.Id);
+
+                foreach (var review in reviews)
+                {
+                    Reviews.Add(review);
+                    AverageRating = reviews.Any()
+                    ? reviews.Average(r => r.Rating)
+                    : 0;
+                }
             }
-            if (reviews.Any())
-                AverageRating = reviews.Average(r => r.Rating);
-            else
-                AverageRating = 0;
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
             }
-    
+        }
+
+
     [RelayCommand]
     private async Task AddReviewAsync()
     {

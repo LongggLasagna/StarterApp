@@ -108,7 +108,7 @@ public partial class MainViewModel : BaseViewModel
     [RelayCommand]
     private async Task NavigateToItemsAsync()
     {
-        await _navigationService.NavigateToAsync(nameof(ItemsListPage));
+        await Shell.Current.GoToAsync(nameof(ItemsListPage));
     }
 
 

@@ -18,9 +18,9 @@ public record ApiItemDto(
     string Category,
     int OwnerId,
     string OwnerName,
-    double OwnerRating,
+    double? OwnerRating,
     bool IsAvailable,
-    double AverageRating,
+    double? AverageRating,
     DateTime CreatedAt,
     double? Latitude = null,
     double? Longitude = null,
@@ -48,3 +48,11 @@ public record ApiReviewDto(
     int Rating,
     string Comment,
     DateTime CreatedAt);
+
+    public record ApiItemReviewsResponse(
+    List<ApiReviewDto> reviews,
+    double? averageRating,
+    int totalReviews,
+    int page,
+    int pageSize,
+    int totalPages);

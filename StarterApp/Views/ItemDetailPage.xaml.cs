@@ -30,7 +30,7 @@ public partial class ItemDetailPage : ContentPage
         BindingContext = _viewModel;
     }
 
-    protected override async void OnAppearing()
+   protected override async void OnAppearing()
     {
         base.OnAppearing();
         await _viewModel.LoadReviewsAsync();

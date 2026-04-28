@@ -64,13 +64,21 @@ public partial class CreateItemViewModel : BaseViewModel
                 return;
             }
 
-            var item = new Item
+          var item = new Item
             {
                 Title = TitleText.Trim(),
                 Description = DescriptionText.Trim(),
-                Category = CategoryText.Trim(),
-                Location = LocationText.Trim(),
                 DailyRate = dailyRate,
+
+                // API-required fields
+                CategoryId = 1,
+                Latitude = 55.9533,
+                Longitude = -3.1883,
+
+                // Local display fields
+                Category = "Tools",
+                Location = "Edinburgh",
+
                 OwnerId = currentUser.Id
             };
 

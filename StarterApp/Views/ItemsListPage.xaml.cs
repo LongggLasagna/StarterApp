@@ -11,11 +11,15 @@ public partial class ItemsListPage : ContentPage
         InitializeComponent();
         _viewModel = viewModel;
         BindingContext = _viewModel;
+
+        
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadItemsAsync();
+        await DisplayAlert("Debug", "OnAppearing fired", "OK");
+
+    await _viewModel.LoadItemsAsync();
     }
 }

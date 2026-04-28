@@ -12,20 +12,20 @@ public class ApiService : IApiService
         _httpClient = httpClient;
     }
 
-    public async Task<List<Item>> GetItemsAsync(string? category = null, string? search = null, int page = 1)
-    {
-        var query = $"items?page={page}&pageSize=20";
+   public async Task<List<Item>> GetItemsAsync(string? category = null, string? search = null, int page = 1)
+        {
+            var query = $"/items?page={page}&pageSize=20";
 
-        if (!string.IsNullOrWhiteSpace(category))
-            query += $"&category={Uri.EscapeDataString(category)}";
+            if (!string.IsNullOrWhiteSpace(category))
+                query += $"&category={Uri.EscapeDataString(category)}";
 
-        if (!string.IsNullOrWhiteSpace(search))
-            query += $"&search={Uri.EscapeDataString(search)}";
+            if (!string.IsNullOrWhiteSpace(search))
+                query += $"&search={Uri.EscapeDataString(search)}";
 
-        var response = await _httpClient.GetFromJsonAsync<ApiItemsResponse>(query);
+            var response = await _httpClient.GetFromJsonAsync<ApiItemsResponse>(query);
 
-        return response?.Items.Select(ToItem).ToList() ?? new List<Item>();
-    }
+            return response?.Items.Select(ToItem).ToList() ?? new List<Item>();
+}
 
     public async Task<Item?> GetItemAsync(int id)
     {
@@ -39,9 +39,9 @@ public class ApiService : IApiService
             item.Title,
             item.Description,
             item.DailyRate,
-            1,
-            55.9533,
-            -3.1883);
+            item.CategoryId,
+            item.Latitude,
+            item.Longitude);
 
         var response = await _httpClient.PostAsJsonAsync("items", request);
 
@@ -77,17 +77,37 @@ public class ApiService : IApiService
 
     private static Item ToItem(ApiItemDto dto)
     {
-        return new Item
+         return new Item
         {
             Id = dto.Id,
             Title = dto.Title,
             Description = dto.Description,
             DailyRate = dto.DailyRate,
+            CategoryId = dto.CategoryId,
             Category = dto.Category,
+            OwnerId = dto.OwnerId,
+            Latitude = dto.Latitude ?? 0,
+            Longitude = dto.Longitude ?? 0,
+            IsAvailable = dto.IsAvailable,
             Location = dto.Latitude.HasValue && dto.Longitude.HasValue
                 ? $"{dto.Latitude:F4}, {dto.Longitude:F4}"
-                : "API location",
-            OwnerId = dto.OwnerId
+                : "API location"
         };
+    }
+
+
+    //review get 
+    public async Task<List<Review>> GetItemReviewsAsync(int itemId)
+    {
+        var response = await _httpClient.GetFromJsonAsync<ApiItemReviewsResponse>($"items/{itemId}/reviews");
+
+        return response?.reviews.Select(r => new Review
+        {
+            Id = r.Id,
+            ReviewerId = r.ReviewerId,
+            Rating = r.Rating,
+            Comment = r.Comment,
+            CreatedAt = r.CreatedAt
+        }).ToList() ?? new List<Review>();
     }
 }

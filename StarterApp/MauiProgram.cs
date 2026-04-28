@@ -23,9 +23,9 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddDbContext<AppDbContext>();
-
         const bool useSharedApi = true;
+
+        builder.Services.AddSingleton<INavigationService, NavigationService>();
 
         if (useSharedApi)
         {
@@ -37,23 +37,30 @@ public static class MauiProgram
             builder.Services.AddSingleton(httpClient);
             builder.Services.AddSingleton<IAuthenticationService, ApiAuthenticationService>();
             builder.Services.AddSingleton<IApiService, ApiService>();
+            builder.Services.AddSingleton<IRentalService, RentalService>();
+            builder.Services.AddSingleton<IReviewService, ReviewService>();
+
+
+            // API-backed repositories
             builder.Services.AddTransient<IItemRepository, ApiItemRepository>();
+            builder.Services.AddTransient<IRentalRepository, ApiRentalRepository>();
+            
+            builder.Services.AddDbContext<AppDbContext>();
+            builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
         }
         else
         {
+            builder.Services.AddDbContext<AppDbContext>();
+
             builder.Services.AddSingleton<IAuthenticationService, LocalAuthenticationService>();
+
+            // Local repositories
+            builder.Services.AddTransient<IItemRepository, ItemRepository>();
+            builder.Services.AddTransient<IRentalRepository, RentalRepository>();
+            builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
         }
 
-        builder.Services.AddSingleton<INavigationService, NavigationService>();
-        builder.Services.AddTransient<IItemRepository, ItemRepository>();
-        builder.Services.AddTransient<IRentalRepository, RentalRepository>();
-        builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
-        builder.Services.AddTransient<IReviewService, ReviewService>();
-        builder.Services.AddTransient<IRentalService, RentalService>();
         
-
-
-
         builder.Services.AddSingleton<AppShellViewModel>();
         builder.Services.AddSingleton<AppShell>();
         builder.Services.AddSingleton<App>();
@@ -85,6 +92,7 @@ public static class MauiProgram
         builder.Services.AddTransient<RequestRentalPage>();
         builder.Services.AddTransient<RentalsPage>();
         builder.Services.AddTransient<SubmitReviewPage>();
+        
 
 #if DEBUG
         builder.Logging.AddDebug();

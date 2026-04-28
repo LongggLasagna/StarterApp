@@ -7,7 +7,7 @@ namespace StarterApp.ViewModels;
 
 public partial class SubmitReviewViewModel : BaseViewModel
 {
-    private readonly IReviewService _reviewService;
+    private readonly IApiService _apiService;
     private readonly IAuthenticationService _authService;
     private readonly INavigationService _navigationService;
 
@@ -20,11 +20,11 @@ public partial class SubmitReviewViewModel : BaseViewModel
     private string comment = string.Empty;
 
     public SubmitReviewViewModel(
-        IReviewService reviewService,
+        IApiService apiService,
         IAuthenticationService authService,
         INavigationService navigationService)
     {
-        _reviewService = reviewService;
+        _apiService = apiService;
         _authService = authService;
         _navigationService = navigationService;
 
@@ -56,7 +56,7 @@ public partial class SubmitReviewViewModel : BaseViewModel
                 return;
             }
 
-            await _reviewService.SubmitReviewAsync(item, user, Rating, Comment);
+            await _apiService.SubmitReviewAsync(item, user, Rating, Comment);
 
             await Application.Current.MainPage.DisplayAlert(
                 "Success",

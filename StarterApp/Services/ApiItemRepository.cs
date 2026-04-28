@@ -12,11 +12,14 @@ public class ApiItemRepository : IItemRepository
         _apiService = apiService;
     }
 
-    public Task<List<Item>> GetAllAsync()
+    public async Task<List<Item>> GetAllAsync()
     {
-        return _apiService.GetItemsAsync();
-    }
+    var items = await _apiService.GetItemsAsync();
 
+    Console.WriteLine($"[API REPO] Got {items.Count} items");
+
+    return items;
+    }
     public Task<Item?> GetByIdAsync(int id)
     {
         return _apiService.GetItemAsync(id);
