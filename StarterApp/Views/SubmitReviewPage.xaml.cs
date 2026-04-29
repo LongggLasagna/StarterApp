@@ -3,18 +3,18 @@ using StarterApp.ViewModels;
 
 namespace StarterApp.Views;
 
-[QueryProperty(nameof(Item), "Item")]
+[QueryProperty(nameof(Rental), "Rental")]
 public partial class SubmitReviewPage : ContentPage
 {
     private readonly SubmitReviewViewModel _viewModel;
 
-    public Item Item
+    public Rental Rental
     {
         set
         {
             if (value != null)
             {
-                _viewModel.LoadItem(value);
+                _viewModel.LoadRental(value.Id);
             }
         }
     }

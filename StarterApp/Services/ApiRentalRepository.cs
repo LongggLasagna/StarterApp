@@ -41,7 +41,7 @@ public class ApiRentalRepository : IRentalRepository
     {
         var request = new
         {
-            status = rental.Status.ToString()
+            status = ToApiStatus(rental.Status)
         };
 
         var response = await _httpClient.PatchAsJsonAsync($"rentals/{rental.Id}/status", request);
@@ -56,13 +56,13 @@ public class ApiRentalRepository : IRentalRepository
     public async Task<List<Rental>> GetIncomingAsync(int ownerId)
     {
         var response = await _httpClient.GetFromJsonAsync<ApiRentalsResponse>("rentals/incoming");
-        return response?.Rentals.Select(ToRental).ToList() ?? new List<Rental>();
+        return response?.rentals.Select(ToRental).ToList() ?? new List<Rental>();
     }
 
     public async Task<List<Rental>> GetOutgoingAsync(int borrowerId)
     {
         var response = await _httpClient.GetFromJsonAsync<ApiRentalsResponse>("rentals/outgoing");
-        return response?.Rentals.Select(ToRental).ToList() ?? new List<Rental>();
+        return response?.rentals.Select(ToRental).ToList() ?? new List<Rental>();
     }
 
     public Task<bool> HasOverLappingRentalAsync(int itemId, DateTime startDate, DateTime endDate)
@@ -103,23 +103,44 @@ public class ApiRentalRepository : IRentalRepository
     }
 
     private static RentalStatus ParseStatus(string status)
-    {
-        return status.Replace(" ", "") switch
         {
-            "Requested" => RentalStatus.Requested,
-            "Approved" => RentalStatus.Approved,
-            "Rejected" => RentalStatus.Rejected,
-            "OutForRent" => RentalStatus.OutForRent,
-            "Returned" => RentalStatus.Returned,
-            "Completed" => RentalStatus.Completed,
-            _ => RentalStatus.Requested
+            var normalised = status
+                .Replace(" ", "")
+                .Replace("-", "")
+                .Replace("_", "")
+                .ToLowerInvariant();
+
+            return normalised switch
+            {
+                "requested" => RentalStatus.Requested,
+                "approved" => RentalStatus.Approved,
+                "rejected" => RentalStatus.Rejected,
+                "outforrent" => RentalStatus.OutForRent,
+                "returned" => RentalStatus.Returned,
+                "completed" => RentalStatus.Completed,
+                _ => RentalStatus.Requested
+            };
+        }
+
+        private static string ToApiStatus(RentalStatus status)
+    {
+        return status switch
+        {
+            RentalStatus.Requested => "Requested",
+            RentalStatus.Approved => "Approved",
+            RentalStatus.Rejected => "Rejected",
+            RentalStatus.OutForRent => "Out for Rent",
+            RentalStatus.Returned => "Returned",
+            RentalStatus.Completed => "Completed",
+            _ => "Requested"
         };
     }
+    
 }
 
 public record ApiRentalsResponse(
-    List<ApiRentalDto> Rentals,
-    int TotalRentals);
+    List<ApiRentalDto> rentals,
+    int totalRentals);
 
 public record ApiRentalDto(
     int Id,

@@ -109,5 +109,33 @@ public class ApiService : IApiService
             Comment = r.Comment,
             CreatedAt = r.CreatedAt
         }).ToList() ?? new List<Review>();
+
     }
+
+    public async Task<Review> CreateReviewAsync(int rentalId, int rating, string comment)
+{
+    var response = await _httpClient.PostAsJsonAsync("reviews", new
+    {
+        rentalId,
+        rating,
+        comment
+    });
+
+    if (!response.IsSuccessStatusCode)
+    {
+        var body = await response.Content.ReadAsStringAsync();
+        throw new InvalidOperationException($"Failed to submit review: {body}");
+    }
+
+    var dto = await response.Content.ReadFromJsonAsync<ApiReviewDto>();
+
+    return new Review
+    {
+        Id = dto!.Id,
+        ReviewerId = dto.ReviewerId,
+        Rating = dto.Rating,
+        Comment = dto.Comment,
+        CreatedAt = dto.CreatedAt
+    };
+}
 }

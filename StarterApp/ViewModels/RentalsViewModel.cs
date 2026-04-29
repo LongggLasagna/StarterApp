@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using StarterApp.Database.Data.Repositories;
 using StarterApp.Database.Models;
 using StarterApp.Services;
+using StarterApp.Views;
 
 namespace StarterApp.ViewModels;
 
@@ -80,45 +81,99 @@ public partial class RentalsViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task LeaveReviewAsync(Rental rental)
+    {
+        if (rental == null)
+            return;
+
+        await Shell.Current.GoToAsync(nameof(SubmitReviewPage), new Dictionary<string, object>
+        {
+            { "Rental", rental }
+        });
+    }
+
+    [RelayCommand]
     private async Task ApproveRentalAsync(Rental rental)
     {
-        if (rental == null) return;
+        try
+        {
+            ClearError();
 
-        rental.Status = RentalStatus.Approved;
-        await _rentalRepository.UpdateAsync(rental);
-        await LoadRentalsAsync();
+            if (rental == null)
+                return;
+
+            await _rentalService.ApproveRentalAsync(rental);
+            await LoadRentalsAsync();
+        }
+        catch (Exception ex)
+        {
+            SetError(ex.Message);
+        }
     }
 
     [RelayCommand]
     private async Task RejectRentalAsync(Rental rental)
     {
-        if (rental == null) return;
+        try
+        {
+            ClearError();
 
-        rental.Status = RentalStatus.Rejected;
-        await _rentalRepository.UpdateAsync(rental);
-        await LoadRentalsAsync();
+            if (rental == null)
+                return;
+
+            await _rentalService.RejectRentalAsync(rental);
+            await LoadRentalsAsync();
+        }
+        catch (Exception ex)
+        {
+            SetError(ex.Message);
+        }
     }
 
     [RelayCommand]
     private async Task MarkOutForRentAsync(Rental rental)
     {
+        try 
+        {
         await _rentalService.MarkOutForRentAsync(rental);
         await LoadRentalsAsync();
+        }
+        catch (Exception ex)
+        {
+            SetError(ex.Message);
+        }
     }
 
     [RelayCommand]
     private async Task MarkReturnedAsync(Rental rental)
     {
+        try
+        {
         await _rentalService.MarkReturnedAsync(rental);
         await LoadRentalsAsync();
+        }
+        catch (Exception ex)
+        {
+            SetError(ex.Message);
+        }
     }
 
     [RelayCommand]
     private async Task MarkCompletedAsync(Rental rental)
     {
-        await _rentalService.MarkCompletedAsync(rental);
-        await LoadRentalsAsync();
+        try
+        {
+            ClearError();
+
+            await _rentalService.MarkCompletedAsync(rental);
+            await LoadRentalsAsync();
+        }
+        catch (Exception ex)
+        {
+            SetError(ex.Message);
+        }
     }
+
 }
             
         

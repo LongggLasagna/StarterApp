@@ -1,6 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using StarterApp.Database.Models;
 using StarterApp.Services;
 
 namespace StarterApp.ViewModels;
@@ -8,10 +7,9 @@ namespace StarterApp.ViewModels;
 public partial class SubmitReviewViewModel : BaseViewModel
 {
     private readonly IApiService _apiService;
-    private readonly IAuthenticationService _authService;
     private readonly INavigationService _navigationService;
 
-    private Item? item;
+    private int rentalId;
 
     [ObservableProperty]
     private int rating = 5;
@@ -21,19 +19,16 @@ public partial class SubmitReviewViewModel : BaseViewModel
 
     public SubmitReviewViewModel(
         IApiService apiService,
-        IAuthenticationService authService,
         INavigationService navigationService)
     {
         _apiService = apiService;
-        _authService = authService;
         _navigationService = navigationService;
-
         Title = "Submit Review";
     }
 
-    public void LoadItem(Item selectedItem)
+    public void LoadRental(int selectedRentalId)
     {
-        item = selectedItem;
+        rentalId = selectedRentalId;
     }
 
     [RelayCommand]
@@ -43,24 +38,17 @@ public partial class SubmitReviewViewModel : BaseViewModel
         {
             ClearError();
 
-            if (item == null)
+            if (rentalId <= 0)
             {
-                SetError("No item selected.");
+                SetError("No rental selected.");
                 return;
             }
 
-            var user = _authService.CurrentUser;
-            if (user == null)
-            {
-                SetError("You must be logged in.");
-                return;
-            }
-
-            await _apiService.SubmitReviewAsync(item, user, Rating, Comment);
+            await _apiService.CreateReviewAsync(rentalId, Rating, Comment);
 
             await Application.Current.MainPage.DisplayAlert(
                 "Success",
-                "Review submitted",
+                "Review submitted.",
                 "OK");
 
             await _navigationService.NavigateBackAsync();

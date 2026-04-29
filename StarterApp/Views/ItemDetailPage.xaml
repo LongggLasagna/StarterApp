@@ -24,8 +24,7 @@
                    FontSize="18"
                    FontAttributes="Bold" />
 
-              <Button Text="Leave a Review"
-                            Command="{Binding AddReviewCommand}" />
+          
 
               <Button Text="Edit Item"
                      Command="{Binding EditItemCommand}"

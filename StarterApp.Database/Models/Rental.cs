@@ -14,6 +14,10 @@ public class Rental
     public decimal TotalPrice { get; set; }
     public RentalStatus Status { get; set; } = RentalStatus.Requested;
     public bool IsRequested => Status == RentalStatus.Requested;
+    public bool IsApproved => Status == RentalStatus.Approved;
+    public bool IsOutForRent => Status == RentalStatus.OutForRent;
+    public bool IsReturned => Status == RentalStatus.Returned;
+    public bool IsCompleted => Status == RentalStatus.Completed;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
 }
