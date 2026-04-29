@@ -2,48 +2,85 @@
 <ContentPage x:Class="StarterApp.Views.ItemsListPage"
              xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="#F6F7FB"
              Title="{Binding Title}">
 
-    <VerticalStackLayout Padding="20" Spacing="15">
-        <Label Text="Available Items"
-               FontSize="24"
-               FontAttributes="Bold" />
+    <VerticalStackLayout Padding="20" Spacing="18">
+
+        <VerticalStackLayout Spacing="4">
+            <Label Text="Available Items"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   TextColor="#111827" />
+            <Label Text="Browse items available to rent"
+                   FontSize="14"
+                   TextColor="#6B7280" />
+        </VerticalStackLayout>
 
         <CollectionView ItemsSource="{Binding Items}"
-                SelectionMode="Single"
-                SelectionChangedCommand="{Binding ItemSelectedCommand}"
-                SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}">
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                        SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}">
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border Stroke="#DDDDDD"
+                    <Border BackgroundColor="White"
+                            Stroke="#E5E7EB"
                             StrokeThickness="1"
-                            Padding="12"
-                            Margin="0,5">
+                            Padding="16"
+                            Margin="0,6">
+
                         <Border.StrokeShape>
-                            <RoundRectangle CornerRadius="8" />
+                            <RoundRectangle CornerRadius="16" />
                         </Border.StrokeShape>
 
-                        <VerticalStackLayout Spacing="4">
-                            <Label Text="{Binding Title}"
-                                   FontSize="18"
-                                   FontAttributes="Bold" />
+                        <VerticalStackLayout Spacing="10">
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding Title}"
+                                       FontSize="19"
+                                       FontAttributes="Bold"
+                                       TextColor="#111827"
+                                       LineBreakMode="TailTruncation" />
+
+                                <Border Grid.Column="1"
+                                        BackgroundColor="#ECFEFF"
+                                        StrokeThickness="0"
+                                        Padding="10,4">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="20" />
+                                    </Border.StrokeShape>
+
+                                    <Label Text="{Binding Category}"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="#0E7490" />
+                                </Border>
+                            </Grid>
 
                             <Label Text="{Binding Description}"
-                                   FontSize="14" />
-
-                            <Label Text="{Binding Category}"
-                                   FontSize="12" />
-
-                            <Label Text="{Binding Location}"
-                                   FontSize="12" />
-
-                            <Label Text="{Binding DailyRate, StringFormat='£{0:F2} per day'}"
                                    FontSize="14"
-                                   FontAttributes="Bold" />
+                                   TextColor="#4B5563"
+                                   MaxLines="2"
+                                   LineBreakMode="TailTruncation" />
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding Location}"
+                                       FontSize="13"
+                                       TextColor="#6B7280" />
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding DailyRate, StringFormat='£{0:F2}/day'}"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#16A34A" />
+                            </Grid>
+
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
     </VerticalStackLayout>
 </ContentPage>
