@@ -1,0 +1,4 @@
+ignore:
+  - "StarterApp.Database/Migrations/**"
+  - "StarterApp.Database/Data/AppDbContext.cs"
+  - "StarterApp.Database/Data/Repositories/**"
