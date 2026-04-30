@@ -1,0 +1,48 @@
+name: Build & Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:16-3.4
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+
+      - name: Restore MAUI workloads
+        run: dotnet workload restore ./StarterApp/StarterApp.csproj
+
+      - name: Restore dependencies
+        run: dotnet restore ./StarterApp.sln
+
+      - name: Build database project
+        run: dotnet build ./StarterApp.Database/StarterApp.Database.csproj --configuration Release --no-restore
+
+      - name: Build main app
+        run: dotnet build ./StarterApp/StarterApp.csproj --configuration Release --no-restore
+
+      - name: Run tests
+        run: dotnet test ./StarterApp.sln --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
