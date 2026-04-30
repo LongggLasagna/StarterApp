@@ -3,6 +3,9 @@ using StarterApp.Database.Models;
 
 namespace StarterApp.Services;
 
+/// <summary>
+/// Contains business logic for rental pricing and rental workflow transitions.
+/// </summary>
 public class RentalService : IRentalService
 {
     private readonly IRentalRepository _rentalRepository;
@@ -12,6 +15,10 @@ public class RentalService : IRentalService
         _rentalRepository = rentalRepository;
     }
 
+/// <summary>
+/// Calculates the total rental price based on item daily rate and rental duration.
+/// </summary>
+/// 
     public decimal CalculateTotalPrice(Item item, DateTime startDate, DateTime endDate)
     {
         var days = (endDate.Date - startDate.Date).Days;
@@ -24,6 +31,9 @@ public class RentalService : IRentalService
         return days * item.DailyRate;
     }
 
+/// <summary>
+/// Creates a new rental request after validating ownership, dates, and overlapping rentals.
+/// </summary>
     public async Task<Rental> RequestRentalAsync(Item item, User borrower, DateTime startDate, DateTime endDate)
     {
         if (borrower.Id == item.OwnerId)
@@ -63,6 +73,9 @@ public class RentalService : IRentalService
         return rental;
     }
 
+/// <summary>
+/// Moves an approved rental into the out-for-rent state.
+/// </summary>
     public async Task MarkOutForRentAsync(Rental rental)
     {
         if (rental.Status != RentalStatus.Approved)
@@ -72,6 +85,9 @@ public class RentalService : IRentalService
         await _rentalRepository.UpdateAsync(rental);
     }
 
+/// <summary>
+/// Marks a rental as returned by the borrower.
+/// </summary>
     public async Task MarkReturnedAsync(Rental rental)
     {
         if (rental.Status != RentalStatus.OutForRent)
@@ -81,6 +97,9 @@ public class RentalService : IRentalService
         await _rentalRepository.UpdateAsync(rental);
     }
 
+/// <summary>
+/// Completes a returned rental after owner confirmation.
+/// </summary>
     public async Task MarkCompletedAsync(Rental rental)
     {
         if (rental.Status != RentalStatus.Returned)
@@ -90,6 +109,9 @@ public class RentalService : IRentalService
         await _rentalRepository.UpdateAsync(rental);
     }
 
+/// <summary>
+/// Approves a requested rental.
+/// </summary>
     public async Task ApproveRentalAsync(Rental rental)
     {
         if (rental.Status != RentalStatus.Requested)
@@ -101,6 +123,9 @@ public class RentalService : IRentalService
         await _rentalRepository.UpdateAsync(rental);
     }
 
+/// <summary>
+/// Rejects a requested rental.
+/// </summary>
     public async Task RejectRentalAsync(Rental rental)
     {
         if (rental.Status != RentalStatus.Requested)
