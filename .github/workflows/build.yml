@@ -1,12 +1,11 @@
 name: Build & Test
 
 on:
-  on:
-    push:
-      branches: [ main ]
-    pull_request:
-      branches: [ main ]
-    workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -37,22 +36,17 @@ jobs:
           dotnet-version: '10.0.x'
           dotnet-quality: 'preview'
 
-      - name: Restore MAUI workloads
-        run: dotnet workload restore ./StarterApp/StarterApp.csproj
-
       - name: Restore dependencies
-        run: dotnet restore ./StarterApp.sln
+        run: dotnet restore ./StarterApp.Database/StarterApp.Database.csproj
 
       - name: Build database project
         run: dotnet build ./StarterApp.Database/StarterApp.Database.csproj --configuration Release --no-restore
 
-      - name: Build main app
-        run: dotnet build ./StarterApp/StarterApp.csproj --configuration Release --no-restore
-
       - name: Run tests
-        run: dotnet test ./StarterApp.sln --configuration Release --no-build --verbosity normal --collect:"XPlat Code Coverage"
+        run: dotnet test ./StarterApp.sln --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
 
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:
-        files: '**/coverage.cobertura.xml'
+          files: '**/coverage.cobertura.xml'
+          token: ${{ secrets.CODECOV_TOKEN }}
