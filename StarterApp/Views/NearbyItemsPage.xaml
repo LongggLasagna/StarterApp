@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="StarterApp.Views.NearbyItemsPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="#F6F7FB"
+             Title="{Binding Title}">
+
+    <VerticalStackLayout Padding="20" Spacing="18">
+
+        <VerticalStackLayout Spacing="4">
+            <Label Text="Find Near Me"
+                   FontSize="30"
+                   FontAttributes="Bold"
+                   TextColor="#111827" />
+
+            <Label Text="Search for available items near your current location"
+                   FontSize="14"
+                   TextColor="#6B7280" />
+        </VerticalStackLayout>
+
+        <Border BackgroundColor="White"
+                Stroke="#E5E7EB"
+                StrokeThickness="1"
+                Padding="16">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="18" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="12">
+                <Label Text="{Binding RadiusKm, StringFormat='Radius: {0:F0} km'}"
+                       FontAttributes="Bold"
+                       TextColor="#111827" />
+
+                <Slider Minimum="1"
+                        Maximum="50"
+                        Value="{Binding RadiusKm}" />
+
+                <Button Text="Search Nearby"
+                        BackgroundColor="#2563EB"
+                        TextColor="White"
+                        CornerRadius="14"
+                        HeightRequest="48"
+                        FontAttributes="Bold"
+                        Command="{Binding LoadNearbyItemsCommand}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView ItemsSource="{Binding Items}"
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding ItemSelectedCommand}"
+                        SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="White"
+                            Stroke="#E5E7EB"
+                            StrokeThickness="1"
+                            Padding="16"
+                            Margin="0,6">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16" />
+                        </Border.StrokeShape>
+
+                        <VerticalStackLayout Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding Title}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#111827" />
+
+                                <Label Grid.Column="1"
+                                       Text="{Binding DailyRate, StringFormat='£{0:F2}/day'}"
+                                       FontAttributes="Bold"
+                                       TextColor="#16A34A" />
+                            </Grid>
+
+                            <Label Text="{Binding Description}"
+                                   MaxLines="2"
+                                   LineBreakMode="TailTruncation"
+                                   TextColor="#4B5563" />
+
+                            <Label Text="{Binding Location}"
+                                   FontSize="13"
+                                   TextColor="#6B7280" />
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Border BackgroundColor="#FEE2E2"
+                StrokeThickness="0"
+                Padding="12"
+                IsVisible="{Binding HasError}">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Label Text="{Binding ErrorMessage}"
+                   TextColor="#991B1B"
+                   FontAttributes="Bold" />
+        </Border>
+
+    </VerticalStackLayout>
+</ContentPage>

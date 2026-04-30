@@ -42,6 +42,13 @@
 
                     <Entry Placeholder="Location"
                            Text="{Binding LocationText}" />
+                    <Entry Placeholder="Latitude e.g. 55.9533"
+                            Text="{Binding LatitudeText}"
+                            Keyboard="Numeric" />
+
+                    <Entry Placeholder="Longitude e.g. -3.1883"
+                            Text="{Binding LongitudeText}"
+                            Keyboard="Numeric" />
 
                     <Entry Placeholder="Daily Rate"
                            Text="{Binding DailyRateText}"

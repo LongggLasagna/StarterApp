@@ -26,6 +26,11 @@ public partial class CreateItemViewModel : BaseViewModel
 
     [ObservableProperty]
     private string dailyRateText = string.Empty;
+    [ObservableProperty]
+    private string latitudeText = "55.9533";
+
+    [ObservableProperty]
+    private string longitudeText = "-3.1883";
 
     public CreateItemViewModel(
         IItemRepository itemRepository,
@@ -56,6 +61,17 @@ public partial class CreateItemViewModel : BaseViewModel
                 SetError("Daily rate must be a valid number greater than zero.");
                 return;
             }
+            if (!double.TryParse(LatitudeText, out var latitude))
+            {
+                SetError("Latitude must be a valid number.");
+                return;
+            }
+
+            if (!double.TryParse(LongitudeText, out var longitude))
+            {
+                SetError("Longitude must be a valid number.");
+                return;
+            }
 
             var currentUser = _authenticationService.CurrentUser;
             if (currentUser == null)
@@ -68,16 +84,13 @@ public partial class CreateItemViewModel : BaseViewModel
             {
                 Title = TitleText.Trim(),
                 Description = DescriptionText.Trim(),
+                Category = CategoryText.Trim(),
+                Location = LocationText.Trim(),
                 DailyRate = dailyRate,
 
-                // API-required fields
                 CategoryId = 1,
-                Latitude = 55.9533,
-                Longitude = -3.1883,
-
-                // Local display fields
-                Category = "Tools",
-                Location = "Edinburgh",
+                Latitude = latitude,
+                Longitude = longitude,
 
                 OwnerId = currentUser.Id
             };

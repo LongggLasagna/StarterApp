@@ -25,7 +25,15 @@ public class ApiService : IApiService
             var response = await _httpClient.GetFromJsonAsync<ApiItemsResponse>(query);
 
             return response?.Items.Select(ToItem).ToList() ?? new List<Item>();
-}
+        }
+    public async Task<List<Item>> GetNearbyItemsAsync(double latitude, double longitude, double radiusKm)
+        {
+            var query = $"/items/nearby?lat={latitude}&lon={longitude}&radius={radiusKm}";
+
+            var response = await _httpClient.GetFromJsonAsync<ApiNearbyItemsResponse>(query);
+
+            return response?.items.Select(ToItem).ToList() ?? new List<Item>();
+        }
 
     public async Task<Item?> GetItemAsync(int id)
     {

@@ -147,4 +147,10 @@ public partial class MainViewModel : BaseViewModel
             IsBusy = false;
         }
     }
+
+    [RelayCommand]
+    private async Task NavigateToNearbyAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(NearbyItemsPage));
+    }
 }

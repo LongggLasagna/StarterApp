@@ -39,6 +39,7 @@ public static class MauiProgram
             builder.Services.AddSingleton<IApiService, ApiService>();
             builder.Services.AddSingleton<IRentalService, RentalService>();
             builder.Services.AddSingleton<IReviewService, ReviewService>();
+            builder.Services.AddSingleton<ILocationService, LocationService>();
 
 
             // API-backed repositories
@@ -50,14 +51,7 @@ public static class MauiProgram
         }
         else
         {
-            builder.Services.AddDbContext<AppDbContext>();
-
-            builder.Services.AddSingleton<IAuthenticationService, LocalAuthenticationService>();
-
-            // Local repositories
-            builder.Services.AddTransient<IItemRepository, ItemRepository>();
-            builder.Services.AddTransient<IRentalRepository, RentalRepository>();
-            builder.Services.AddTransient<IReviewRepository, ReviewRepository>();
+           
         }
 
         
@@ -78,6 +72,7 @@ public static class MauiProgram
         builder.Services.AddTransient<RequestRentalViewModel>();
         builder.Services.AddTransient<RentalsViewModel>();
         builder.Services.AddTransient<SubmitReviewViewModel>();
+        builder.Services.AddTransient<NearbyItemsViewModel>();
 
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<LoginPage>();
@@ -92,7 +87,7 @@ public static class MauiProgram
         builder.Services.AddTransient<RequestRentalPage>();
         builder.Services.AddTransient<RentalsPage>();
         builder.Services.AddTransient<SubmitReviewPage>();
-        
+        builder.Services.AddTransient<NearbyItemsPage>();
 
 #if DEBUG
         builder.Logging.AddDebug();

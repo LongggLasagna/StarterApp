@@ -9,6 +9,16 @@ public record ApiItemsResponse(
     int PageSize,
     int TotalPages);
 
+public record ApiNearbyItemsResponse(
+    List<ApiItemDto> items,
+    ApiSearchLocation searchLocation,
+    double radius,
+    int totalResults);
+
+public record ApiSearchLocation(
+    double latitude,
+    double longitude);
+
 public record ApiItemDto(
     int Id,
     string Title,
