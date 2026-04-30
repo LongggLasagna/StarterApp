@@ -69,4 +69,9 @@
 	  <ProjectReference Include="../StarterApp.Database/StarterApp.Database.csproj" />
 	</ItemGroup>
 
+	<PropertyGroup>
+  	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  	  <NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
+
 </Project>

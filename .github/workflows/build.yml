@@ -36,22 +36,59 @@ jobs:
           dotnet-version: '10.0.x'
           dotnet-quality: 'preview'
 
+      # Restore & Build
       - name: Restore dependencies
         run: dotnet restore ./StarterApp.Database/StarterApp.Database.csproj
 
       - name: Build database project
         run: dotnet build ./StarterApp.Database/StarterApp.Database.csproj --configuration Release --no-restore
 
-      - name: Run tests
+      # Run xUnit Tests + Coverage
+      - name: Run tests with coverage
         run: dotnet test ./StarterApp.Tests/StarterApp.Tests.csproj --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
-      
-      - name: Find coverage files
-        run: find . -name "coverage.cobertura.xml"
 
-      - name: Upload coverage reports
+      # Upload test results (REQUIRED EVIDENCE)
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: StarterApp.Tests/TestResults/**
+
+      # Upload coverage to Codecov
+      - name: Upload coverage
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
-          files: '**/coverage.cobertura.xml'
+          directory: ./StarterApp.Tests/TestResults
           fail_ci_if_error: true
+
+      # Install Doxygen
+      - name: Install Doxygen
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      # Generate Doxygen config
+      - name: Generate Doxygen config
+        run: |
+          doxygen -g Doxyfile
+          sed -i 's|OUTPUT_DIRECTORY.*|OUTPUT_DIRECTORY = docs|' Doxyfile
+          sed -i 's|INPUT.*|INPUT = StarterApp StarterApp.Database|' Doxyfile
+          sed -i 's|RECURSIVE.*|RECURSIVE = YES|' Doxyfile
+          sed -i 's|GENERATE_HTML.*|GENERATE_HTML = YES|' Doxyfile
+          sed -i 's|GENERATE_LATEX.*|GENERATE_LATEX = NO|' Doxyfile
+          sed -i 's|EXTRACT_ALL.*|EXTRACT_ALL = YES|' Doxyfile
+
+      # Run Doxygen
+      - name: Run Doxygen
+        run: doxygen Doxyfile
+
+      # Upload Doxygen HTML (REQUIRED EVIDENCE)
+      - name: Upload Doxygen HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen-docs
+          path: docs/html
+          if-no-files-found: error
+      
