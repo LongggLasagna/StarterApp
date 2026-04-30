@@ -86,4 +86,29 @@ jobs:
         with:
           directory: ./StarterApp.Tests/TestResults
           fail_ci_if_error: true
+      - name: Install Doxygen
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      - name: Generate Doxygen config
+        run: |
+          doxygen -g Doxyfile
+          sed -i 's|PROJECT_NAME.*|PROJECT_NAME = "StarterApp"|' Doxyfile
+          sed -i 's|OUTPUT_DIRECTORY.*|OUTPUT_DIRECTORY = docs|' Doxyfile
+          sed -i 's|INPUT .*|INPUT = StarterApp StarterApp.Database StarterApp.Tests|' Doxyfile
+          sed -i 's|RECURSIVE .*|RECURSIVE = YES|' Doxyfile
+          sed -i 's|GENERATE_HTML .*|GENERATE_HTML = YES|' Doxyfile
+          sed -i 's|GENERATE_LATEX .*|GENERATE_LATEX = NO|' Doxyfile
+          sed -i 's|EXTRACT_ALL .*|EXTRACT_ALL = YES|' Doxyfile
+
+      - name: Run Doxygen
+        run: doxygen Doxyfile
+
+      - name: Upload Doxygen HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen-docs
+          path: docs/html
+          if-no-files-found: error
       
