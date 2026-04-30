@@ -1,3 +1,9 @@
+using StarterApp.Tests.Fixtures;
+using Xunit;
+
+
+namespace StarterApp.Tests.Fixtures;
+
 public class DatabaseFixtureTests
 {
     [Fact]
