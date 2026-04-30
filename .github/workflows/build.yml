@@ -43,8 +43,8 @@ jobs:
         run: dotnet build ./StarterApp.Database/StarterApp.Database.csproj --configuration Release --no-restore
 
       - name: Run tests
-        run: dotnet test ./StarterApp.sln --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
-
+        run: dotnet test ./StarterApp.Tests/StarterApp.Tests.csproj --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+      
       - name: Upload coverage reports
         uses: codecov/codecov-action@v3
         with:
