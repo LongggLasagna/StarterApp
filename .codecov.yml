@@ -1,0 +1,7 @@
+ignore:
+  - "StarterApp.Database/Migrations/**"
+  - "StarterApp.Database/Data/AppDbContext.cs"
+  - "StarterApp.Database/Data/Repositories/**"
+  - "StarterApp.Database/Models/UserRole.cs"
+  - "StarterApp.Database/Models/Role.cs"
+  - "StarterApp.Database/Models/RoleConstants.cs"
