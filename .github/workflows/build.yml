@@ -47,12 +47,32 @@ jobs:
       - name: Run tests with coverage
         run: dotnet test ./StarterApp.Tests/StarterApp.Tests.csproj --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
 
-      # Upload test results (REQUIRED EVIDENCE)
+      # Upload test results
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: StarterApp.Tests/TestResults/**
+
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Generate coverage report
+        run: |
+          reportgenerator \
+            -reports:"StarterApp.Tests/TestResults/**/coverage.cobertura.xml" \
+            -targetdir:"coverage-report" \
+            -reporttypes:"Html;MarkdownSummaryGithub"
+
+      - name: Show coverage summary in GitHub
+        run: cat coverage-report/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html-report
+          path: coverage-report
+          if-no-files-found: error
 
       # Upload coverage to Codecov
       - name: Upload coverage
