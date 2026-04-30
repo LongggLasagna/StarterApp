@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="StarterApp.Views.RequestRentalPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="#F6F7FB"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Request Rental"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="#111827" />
+
+                <Label Text="Choose your rental dates and submit a request"
+                       FontSize="14"
+                       TextColor="#6B7280" />
+            </VerticalStackLayout>
+
+            <Border BackgroundColor="White"
+                    Stroke="#E5E7EB"
+                    StrokeThickness="1"
+                    Padding="18">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="18" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label Text="Start Date"
+                           FontAttributes="Bold"
+                           TextColor="#374151" />
+                    <DatePicker Date="{Binding StartDate}" />
+
+                    <Label Text="End Date"
+                           FontAttributes="Bold"
+                           TextColor="#374151" />
+                    <DatePicker Date="{Binding EndDate}" />
+
+                    <Border BackgroundColor="#ECFDF5"
+                            StrokeThickness="0"
+                            Padding="14">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="14" />
+                        </Border.StrokeShape>
+
+                        <Label Text="{Binding TotalPrice, StringFormat='Total: £{0:F2}'}"
+                               FontSize="22"
+                               FontAttributes="Bold"
+                               TextColor="#16A34A" />
+                    </Border>
+
+                    <Border BackgroundColor="#FEE2E2"
+                            StrokeThickness="0"
+                            Padding="12"
+                            IsVisible="{Binding HasError}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+
+                        <Label Text="{Binding ErrorMessage}"
+                               TextColor="#991B1B"
+                               FontAttributes="Bold" />
+                    </Border>
+
+                    <Button Text="Submit Request"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            CornerRadius="14"
+                            HeightRequest="48"
+                            FontAttributes="Bold"
+                            Command="{Binding SubmitRequestCommand}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

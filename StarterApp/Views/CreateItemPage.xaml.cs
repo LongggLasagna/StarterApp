@@ -2,9 +2,9 @@ using StarterApp.ViewModels;
 
 namespace StarterApp.Views;
 
-public partial class LoginPage : ContentPage
+public partial class CreateItemPage : ContentPage
 {
-    public LoginPage(LoginViewModel viewModel)
+    public CreateItemPage(CreateItemViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

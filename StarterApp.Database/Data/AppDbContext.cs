@@ -38,7 +38,8 @@ public class AppDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Item> Items { get; set; }
-
+    public DbSet<Rental> Rentals { get; set; }
+    public DbSet<Review> Reviews { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -88,6 +89,41 @@ public class AppDbContext : DbContext
             entity.HasOne(e => e.Owner)
                   .WithMany()
                   .HasForeignKey(e => e.OwnerId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Configure Rental entity
+        modelBuilder.Entity<Rental>(entity =>
+        {
+            entity.Property(e => e.TotalPrice).HasColumnType("decimal(10,2)");
+
+            entity.HasOne(e => e.Item)
+                  .WithMany()
+                  .HasForeignKey(e => e.ItemId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Borrower)
+                  .WithMany()
+                  .HasForeignKey(e => e.BorrowerId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.Property(e => e.Status)
+                    .HasConversion<string>()
+                    .HasMaxLength(50);
+        });    
+
+        // Configure Review entity
+        modelBuilder.Entity<Review>(entity =>
+        {
+            entity.Property(e => e.Comment).HasMaxLength(1000);
+
+            entity.HasOne(e => e.Item)
+                  .WithMany()
+                  .HasForeignKey(e => e.ItemId)
+                  .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(e => e.Reviewer)
+                  .WithMany()
+                  .HasForeignKey(e => e.ReviewerId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
 

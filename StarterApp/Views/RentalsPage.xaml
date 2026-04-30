@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="StarterApp.Views.RentalsPage"
+             x:Name="RentalsPageRoot"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="#F6F7FB"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="26">
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Rentals"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="#1F2937" />
+                <Label Text="Manage incoming and outgoing rental requests"
+                       FontSize="14"
+                       TextColor="#6B7280" />
+            </VerticalStackLayout>
+
+            <Label Text="Incoming Requests"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#111827" />
+
+            <CollectionView ItemsSource="{Binding IncomingRentals}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White"
+                                Stroke="#E5E7EB"
+                                StrokeThickness="1"
+                                Padding="16"
+                                Margin="0,6">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+
+                            <VerticalStackLayout Spacing="10">
+
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding Item.Title}"
+                                           FontSize="19"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827"
+                                           LineBreakMode="TailTruncation" />
+
+                                    <Border Grid.Column="1"
+                                            BackgroundColor="#EEF2FF"
+                                            StrokeThickness="0"
+                                            Padding="10,4">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="20" />
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding Status}"
+                                               FontSize="12"
+                                               TextColor="#4338CA"
+                                               FontAttributes="Bold" />
+                                    </Border>
+                                </Grid>
+
+                                <Label Text="{Binding Borrower.Email, StringFormat='Borrower: {0}'}"
+                                       TextColor="#4B5563" />
+
+                                <Grid ColumnDefinitions="*,*"
+                                      RowDefinitions="Auto,Auto"
+                                      ColumnSpacing="12"
+                                      RowSpacing="4">
+                                    <Label Text="{Binding StartDate, StringFormat='Start: {0:dd MMM yyyy}'}"
+                                           TextColor="#6B7280" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding EndDate, StringFormat='End: {0:dd MMM yyyy}'}"
+                                           TextColor="#6B7280" />
+                                    <Label Grid.Row="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding TotalPrice, StringFormat='Total: £{0:F2}'}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </Grid>
+
+                                <HorizontalStackLayout Spacing="10">
+                                    <Button Text="Approve"
+                                            IsVisible="{Binding IsRequested}"
+                                            BackgroundColor="#16A34A"
+                                            TextColor="White"
+                                            CornerRadius="12"
+                                            Command="{Binding BindingContext.ApproveRentalCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+
+                                    <Button Text="Reject"
+                                            IsVisible="{Binding IsRequested}"
+                                            BackgroundColor="#DC2626"
+                                            TextColor="White"
+                                            CornerRadius="12"
+                                            Command="{Binding BindingContext.RejectRentalCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+
+                                    <Button Text="Start Rental"
+                                            IsVisible="{Binding IsApproved}"
+                                            BackgroundColor="#2563EB"
+                                            TextColor="White"
+                                            CornerRadius="12"
+                                            Command="{Binding BindingContext.MarkOutForRentCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+
+                                    <Button Text="Complete Rental"
+                                            IsVisible="{Binding IsReturned}"
+                                            BackgroundColor="#7C3AED"
+                                            TextColor="White"
+                                            CornerRadius="12"
+                                            Command="{Binding BindingContext.MarkCompletedCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="Outgoing Requests"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#111827" />
+
+            <CollectionView ItemsSource="{Binding OutgoingRentals}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White"
+                                Stroke="#E5E7EB"
+                                StrokeThickness="1"
+                                Padding="16"
+                                Margin="0,6">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+
+                            <VerticalStackLayout Spacing="10">
+
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding Item.Title}"
+                                           FontSize="19"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827"
+                                           LineBreakMode="TailTruncation" />
+
+                                    <Border Grid.Column="1"
+                                            BackgroundColor="#ECFEFF"
+                                            StrokeThickness="0"
+                                            Padding="10,4">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="20" />
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding Status}"
+                                               FontSize="12"
+                                               TextColor="#0E7490"
+                                               FontAttributes="Bold" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,*"
+                                      RowDefinitions="Auto,Auto"
+                                      ColumnSpacing="12"
+                                      RowSpacing="4">
+                                    <Label Text="{Binding StartDate, StringFormat='Start: {0:dd MMM yyyy}'}"
+                                           TextColor="#6B7280" />
+                                    <Label Grid.Column="1"
+                                           Text="{Binding EndDate, StringFormat='End: {0:dd MMM yyyy}'}"
+                                           TextColor="#6B7280" />
+                                    <Label Grid.Row="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding TotalPrice, StringFormat='Total: £{0:F2}'}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#111827" />
+                                </Grid>
+
+                                <HorizontalStackLayout Spacing="10">
+                                    <Button Text="Mark Returned"
+                                            IsVisible="{Binding IsOutForRent}"
+                                            BackgroundColor="#2563EB"
+                                            TextColor="White"
+                                            CornerRadius="12"
+                                            Command="{Binding BindingContext.MarkReturnedCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+
+                                    <Button Text="Leave Review"
+                                            IsVisible="{Binding IsCompleted}"
+                                            BackgroundColor="#F59E0B"
+                                            TextColor="White"
+                                            CornerRadius="12"
+                                            Command="{Binding BindingContext.LeaveReviewCommand, Source={x:Reference RentalsPageRoot}}"
+                                            CommandParameter="{Binding .}" />
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Border BackgroundColor="#FEE2E2"
+                    StrokeThickness="0"
+                    Padding="12"
+                    IsVisible="{Binding HasError}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12" />
+                </Border.StrokeShape>
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="#991B1B"
+                       FontAttributes="Bold" />
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

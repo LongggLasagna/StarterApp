@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="StarterApp.Views.CreateItemPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             BackgroundColor="#F6F7FB"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="18">
+
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Create New Item"
+                       FontSize="30"
+                       FontAttributes="Bold"
+                       TextColor="#111827" />
+
+                <Label Text="List an item for others to rent"
+                       FontSize="14"
+                       TextColor="#6B7280" />
+            </VerticalStackLayout>
+
+            <Border BackgroundColor="White"
+                    Stroke="#E5E7EB"
+                    StrokeThickness="1"
+                    Padding="18">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="18" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Entry Placeholder="Title"
+                           Text="{Binding TitleText}" />
+
+                    <Editor Placeholder="Description"
+                            Text="{Binding DescriptionText}"
+                            AutoSize="TextChanges"
+                            HeightRequest="110" />
+
+                    <Entry Placeholder="Category"
+                           Text="{Binding CategoryText}" />
+
+                    <Entry Placeholder="Location"
+                           Text="{Binding LocationText}" />
+                    <Entry Placeholder="Latitude e.g. 55.9533"
+                            Text="{Binding LatitudeText}"
+                            Keyboard="Numeric" />
+
+                    <Entry Placeholder="Longitude e.g. -3.1883"
+                            Text="{Binding LongitudeText}"
+                            Keyboard="Numeric" />
+
+                    <Entry Placeholder="Daily Rate"
+                           Text="{Binding DailyRateText}"
+                           Keyboard="Numeric" />
+
+                    <Border BackgroundColor="#FEE2E2"
+                            StrokeThickness="0"
+                            Padding="12"
+                            IsVisible="{Binding HasError}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <Label Text="{Binding ErrorMessage}"
+                               TextColor="#991B1B"
+                               FontAttributes="Bold" />
+                    </Border>
+
+                    <Button Text="Save Item"
+                            BackgroundColor="#2563EB"
+                            TextColor="White"
+                            CornerRadius="14"
+                            HeightRequest="48"
+                            FontAttributes="Bold"
+                            Command="{Binding CreateItemCommand}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

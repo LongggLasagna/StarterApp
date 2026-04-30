@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StarterApp.Database.Data;
@@ -11,9 +12,11 @@ using StarterApp.Database.Data;
 namespace StarterApp.Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260424190929_AddRentalModel")]
+    partial class AddRentalModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,40 +104,6 @@ namespace StarterApp.Database.Migrations
                     b.HasIndex("ItemId");
 
                     b.ToTable("Rentals");
-                });
-
-            modelBuilder.Entity("StarterApp.Database.Models.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("character varying(1000)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ReviewerId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.HasIndex("ReviewerId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("StarterApp.Database.Models.Role", b =>
@@ -283,25 +252,6 @@ namespace StarterApp.Database.Migrations
                     b.Navigation("Borrower");
 
                     b.Navigation("Item");
-                });
-
-            modelBuilder.Entity("StarterApp.Database.Models.Review", b =>
-                {
-                    b.HasOne("StarterApp.Database.Models.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StarterApp.Database.Models.User", "Reviewer")
-                        .WithMany()
-                        .HasForeignKey("ReviewerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Item");
-
-                    b.Navigation("Reviewer");
                 });
 
             modelBuilder.Entity("StarterApp.Database.Models.UserRole", b =>
