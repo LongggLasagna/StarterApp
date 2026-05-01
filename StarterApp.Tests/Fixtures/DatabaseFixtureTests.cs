@@ -1,22 +1,28 @@
-using StarterApp.Tests.Fixtures;
 using Xunit;
-
 
 namespace StarterApp.Tests.Fixtures;
 
-public class DatabaseFixtureTests
+public class DatabaseFixtureTests : IClassFixture<DatabaseFixture>
 {
+    private readonly DatabaseFixture _fixture;
+
+    public DatabaseFixtureTests(DatabaseFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     [Fact]
-    public void Fixture_ReturnsValidConnection()
+    public void DatabaseFixture_ProvidesCiDatabaseConnectionString()
     {
         // Arrange
-        var fixture = new DatabaseFixture();
+        var expectedDatabaseName = "test_db";
 
         // Act
-        var conn = fixture.ConnectionString;
+        var connectionString = _fixture.ConnectionString;
 
         // Assert
-        Assert.Contains("test_db", conn);
+        Assert.Contains(expectedDatabaseName, connectionString);
+        Assert.Contains("test_user", connectionString);
+        Assert.Contains("test_password", connectionString);
     }
 }
-
