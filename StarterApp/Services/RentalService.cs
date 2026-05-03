@@ -1,5 +1,6 @@
 using StarterApp.Database.Data.Repositories;
 using StarterApp.Database.Models;
+using StarterApp.Database.States;
 
 namespace StarterApp.Services;
 
@@ -73,65 +74,60 @@ public class RentalService : IRentalService
         return rental;
     }
 
-/// <summary>
-/// Moves an approved rental into the out-for-rent state.
-/// </summary>
+    private static IRentalState GetState(Rental rental)
+    {
+    return rental.Status switch
+        {
+            RentalStatus.Requested => new RequestedState(),
+            RentalStatus.Approved => new ApprovedState(),
+            RentalStatus.Rejected => new RejectedState(),
+            RentalStatus.OutForRent => new OutForRentState(),
+            RentalStatus.Returned => new ReturnedState(),
+            RentalStatus.Completed => new CompletedState(),
+            _ => new RequestedState()
+        };
+    }
+
     public async Task MarkOutForRentAsync(Rental rental)
     {
-        if (rental.Status != RentalStatus.Approved)
-            throw new InvalidOperationException("Rental must be approved first.");
+        var state = GetState(rental);
+        state.ValidateTransitionTo(RentalStatus.OutForRent);
 
         rental.Status = RentalStatus.OutForRent;
         await _rentalRepository.UpdateAsync(rental);
     }
 
-/// <summary>
-/// Marks a rental as returned by the borrower.
-/// </summary>
     public async Task MarkReturnedAsync(Rental rental)
     {
-        if (rental.Status != RentalStatus.OutForRent)
-            throw new InvalidOperationException("Rental must be out for rent.");
+        var state = GetState(rental);
+        state.ValidateTransitionTo(RentalStatus.Returned);
 
         rental.Status = RentalStatus.Returned;
         await _rentalRepository.UpdateAsync(rental);
     }
 
-/// <summary>
-/// Completes a returned rental after owner confirmation.
-/// </summary>
     public async Task MarkCompletedAsync(Rental rental)
     {
-        if (rental.Status != RentalStatus.Returned)
-            throw new InvalidOperationException("Rental must be returned first.");
+        var state = GetState(rental);
+        state.ValidateTransitionTo(RentalStatus.Completed);
 
         rental.Status = RentalStatus.Completed;
         await _rentalRepository.UpdateAsync(rental);
     }
 
-/// <summary>
-/// Approves a requested rental.
-/// </summary>
     public async Task ApproveRentalAsync(Rental rental)
     {
-        if (rental.Status != RentalStatus.Requested)
-        {
-            throw new InvalidOperationException("Only requested rentals can be approved.");
-        }
+        var state = GetState(rental);
+        state.ValidateTransitionTo(RentalStatus.Approved);
 
         rental.Status = RentalStatus.Approved;
         await _rentalRepository.UpdateAsync(rental);
     }
 
-/// <summary>
-/// Rejects a requested rental.
-/// </summary>
     public async Task RejectRentalAsync(Rental rental)
     {
-        if (rental.Status != RentalStatus.Requested)
-        {
-            throw new InvalidOperationException("Only requested rentals can be rejected.");
-        }
+        var state = GetState(rental);
+        state.ValidateTransitionTo(RentalStatus.Rejected);
 
         rental.Status = RentalStatus.Rejected;
         await _rentalRepository.UpdateAsync(rental);
