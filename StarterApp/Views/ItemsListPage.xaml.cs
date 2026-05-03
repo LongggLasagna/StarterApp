@@ -18,7 +18,7 @@ public partial class ItemsListPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await DisplayAlert("Debug", "OnAppearing fired", "OK");
+       
 
     await _viewModel.LoadItemsAsync();
     }
