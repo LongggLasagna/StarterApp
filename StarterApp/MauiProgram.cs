@@ -89,6 +89,7 @@ public static class MauiProgram
         builder.Services.AddTransient<SubmitReviewPage>();
         builder.Services.AddTransient<NearbyItemsPage>();
 
+   
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

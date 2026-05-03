@@ -7,6 +7,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -42,16 +47,87 @@ jobs:
       - name: Build database project
         run: dotnet build ./StarterApp.Database/StarterApp.Database.csproj --configuration Release --no-restore
 
-      - name: Run tests
-        run: dotnet test ./StarterApp.Tests/StarterApp.Tests.csproj --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
-      
-      - name: Find coverage files
-        run: find . -name "coverage.cobertura.xml"
+      - name: Clean previous reports
+        run: |
+          rm -rf StarterApp.Tests/TestResults
+          rm -rf coverage-report
+          rm -rf docs
 
-      - name: Upload coverage reports
+      - name: Run xUnit tests with coverage
+        run: |
+          dotnet test ./StarterApp.Tests/StarterApp.Tests.csproj \
+            --configuration Release \
+            --verbosity normal \
+            --logger "trx;LogFileName=test-results.trx" \
+            --collect:"XPlat Code Coverage" \
+            --results-directory ./StarterApp.Tests/TestResults
+
+      - name: Display xUnit test results
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: xUnit Test Results
+          path: StarterApp.Tests/TestResults/*.trx
+          reporter: dotnet-trx
+
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Generate filtered coverage report
+        run: |
+          reportgenerator \
+            -reports:"StarterApp.Tests/TestResults/**/coverage.cobertura.xml" \
+            -targetdir:"coverage-report" \
+            -reporttypes:"Html;MarkdownSummaryGithub" \
+            -filefilters:"-*/Migrations/*;-*/Data/AppDbContext.cs;-*/Data/Repositories/*;-*/Models/UserRole.cs;-*/Models/Role.cs;-*/Models/RoleConstants.cs"
+
+      - name: Show coverage summary in GitHub
+        run: cat coverage-report/SummaryGithub.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload coverage HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html-report
+          path: coverage-report
+          if-no-files-found: error
+
+      - name: Upload xUnit test results
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: StarterApp.Tests/TestResults/**
+          if-no-files-found: error
+
+      - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
-          files: '**/coverage.cobertura.xml'
+          directory: ./StarterApp.Tests/TestResults
           fail_ci_if_error: true
+
+      - name: Install Doxygen
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen graphviz
+
+      - name: Generate Doxygen config
+        run: |
+          doxygen -g Doxyfile
+          sed -i 's|PROJECT_NAME.*|PROJECT_NAME = "StarterApp"|' Doxyfile
+          sed -i 's|OUTPUT_DIRECTORY.*|OUTPUT_DIRECTORY = docs|' Doxyfile
+          sed -i 's|INPUT .*|INPUT = StarterApp StarterApp.Database StarterApp.Tests|' Doxyfile
+          sed -i 's|RECURSIVE .*|RECURSIVE = YES|' Doxyfile
+          sed -i 's|GENERATE_HTML .*|GENERATE_HTML = YES|' Doxyfile
+          sed -i 's|GENERATE_LATEX .*|GENERATE_LATEX = NO|' Doxyfile
+          sed -i 's|EXTRACT_ALL .*|EXTRACT_ALL = YES|' Doxyfile
+
+      - name: Run Doxygen
+        run: doxygen Doxyfile
+
+      - name: Upload Doxygen HTML documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: doxygen-docs
+          path: docs/html
+          if-no-files-found: error

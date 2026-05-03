@@ -42,11 +42,9 @@ public partial class ItemsListViewModel : BaseViewModel
 
             Items.Clear();
 
-            await Application.Current.MainPage.DisplayAlert("DEBUG", "Calling repository...", "OK");
 
             var items = await _itemRepository.GetAllAsync();
 
-            await Application.Current.MainPage.DisplayAlert("DEBUG", $"Got {items.Count} items", "OK");
 
             foreach (var item in items)
             {
